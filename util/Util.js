@@ -1,8 +1,8 @@
 const request = require('node-superfetch');
 const crypto = require('crypto');
 const { IMGUR_KEY } = process.env;
-const yes = ['evet'];
-const no = ['hayır']
+const yes = ['yes'];
+const no = ['no']
 
 const deleteCommandMessages = function (msg, client) { // eslint-disable-line consistent-return
 	if (msg.deletable && client.provider.get('global', 'deletecommandmessages', false)) {
