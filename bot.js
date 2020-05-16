@@ -1,7 +1,7 @@
-const { GOOGLE_API_KEY } = require('./anahtarlar.json');
+const { GOOGLE_API_KEY } = require('./keys.json');
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const ayarlar = require('./ayarlar.json')
+const settings = require('./settings.json')
 const YouTube = require('simple-youtube-api');
 const queue = new Map(); 
 const express = require('express');
@@ -278,7 +278,7 @@ fs.readdir('./komutlar/', (err, files) => {
   if (err) console.error(err);
   log(`${files.length} komut yüklenecek.`);
   files.forEach(f => {
-    let props = require(`./komutlar/${f}`);
+    let props = require(`./commands/${f}`);
     log(`Yüklenen komutlar: ${props.help.name}.`);
     client.commands.set(props.help.name, props);
     props.conf.aliases.forEach(alias => {
@@ -291,8 +291,8 @@ fs.readdir('./komutlar/', (err, files) => {
 client.reload = command => {
   return new Promise((resolve, reject) => {
     try {
-      delete require.cache[require.resolve(`./komutlar/${command}`)];
-      let cmd = require(`./komutlar/${command}`);
+      delete require.cache[require.resolve(`./commands/${command}`)];
+      let cmd = require(`./commands/${command}`);
       client.commands.delete(command);
       client.aliases.forEach((cmd, alias) => {
         if (cmd === command) client.aliases.delete(alias);
@@ -311,7 +311,7 @@ client.reload = command => {
 client.load = command => {
   return new Promise((resolve, reject) => {
     try {
-      let cmd = require(`./komutlar/${command}`);
+      let cmd = require(`./commands/${command}`);
       client.commands.set(command, cmd);
       cmd.conf.aliases.forEach(alias => {
         client.aliases.set(alias, cmd.help.name);
@@ -326,8 +326,8 @@ client.load = command => {
 client.unload = command => {
   return new Promise((resolve, reject) => {
     try {
-      delete require.cache[require.resolve(`./komutlar/${command}`)];
-      let cmd = require(`./komutlar/${command}`);
+      delete require.cache[require.resolve(`./commands/${command}`)];
+      let cmd = require(`./commands/${command}`);
       client.commands.delete(command);
       client.aliases.forEach((cmd, alias) => {
         if (cmd === command) client.aliases.delete(alias);
@@ -339,18 +339,7 @@ client.unload = command => {
   });
 };
 
-  
-client.elevation = message => {
-  if(!message.guild) {
-	return; }
-  let permlvl = 0;
-  if (message.member.hasPermission("BAN_MEMBERS")) permlvl = 2;
-  if (message.member.hasPermission("ADMINISTRATOR")) permlvl = 3;
-  if (message.author.id === ayarlar.sahip) permlvl = 4;
-  return permlvl;
-};
+
+client.login(settings.token);
 
 
-client.login(ayarlar.token);
-
-//-------------------KODLAR BURADAN DEVAM-------------------\\
