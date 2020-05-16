@@ -6,15 +6,6 @@ const YouTube = require('simple-youtube-api');
 const queue = new Map(); 
 const express = require('express');
 const app = express();
-const http = require('http');
-    app.get("/", (request, response) => {
-    console.log(` BoomBox by z0dc is Online!`);
-    response.sendStatus(200);
-    });
-    app.listen(process.env.PORT);
-    setInterval(() => {
-    http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-    }, 280000);
 const token = "Njg1NzkyNjAxMTYwNTQ4MzYy.XmT9Zg.ps1EgJDnnH3xpIhTCnttoiI3FnE";
 const youtube = new YouTube(GOOGLE_API_KEY);
 const ytdl = require('ytdl-core');
@@ -42,7 +33,7 @@ client.on('message', async msg => {
 	const searchString = args.slice(1).join(' ');
 	const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
 	const serverQueue = queue.get(msg.guild.id);
-	let command = msg.content.split(' ')[0].slice(ayarlar.prefix.length);
+	let command = msg.content.split(' ')[0].slice(settings.prefix.length);
 	//command = command.slice(prefix.length)
 
 	if (command === 'play') {
